@@ -1,0 +1,6 @@
+__pycache__
+database.sqlite3
+.env
+public/
+.venv
+.pytest_cache
