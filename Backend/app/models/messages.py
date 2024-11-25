@@ -1,11 +1,16 @@
-from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional
+from beanie import Document, Link
 from datetime import datetime
+from typing import Optional
 
-class Messages(BaseModel):
-    id: int
-    writerId: Optional[int]  # 작성자 ID
+from app.models.users import User
+from app.models.chats import Chat
+
+class Messages(Document):
+    # id: int
+    writerId: Optional[Link[User]] # Optional[int]  # 작성자 ID
     text: str
-    writeTime: datetime = Field(default_factory=datetime.utcnow)
+    writeTime: datetime = datetime.utcnow()
+    chatId: Optional[Link[Chat]] # chat 그룹은 알아야지
 
-    model_config = ConfigDict(from_attributes=True)
+    class Settings:
+        collection = "Messages"

@@ -1,7 +1,8 @@
-from pydantic import BaseModel, ConfigDict
-from typing import Optional
+from beanie import Document
+from datetime import datetime
 
-class ChatRoom(BaseModel):
-    id: int
+class ChatRoom(Document):
+    # id: int
 
-    model_config = ConfigDict(from_attributes=True)
+    class Settings:
+        collection = "ChatRoom"

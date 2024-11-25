@@ -1,8 +1,10 @@
-from pydantic import BaseModel, Field, ConfigDict
+from beanie import Document, Link
 from typing import Optional, List
 
-class UserInfo(BaseModel):
-    id: int
+from app.models.users import User
+
+class UserInfo(Document):
+    # id: int
     isMale: bool
     dormitary: Optional[int] = 0
     latestGPA: float
@@ -16,4 +18,7 @@ class UserInfo(BaseModel):
     trait: Optional[List[str]] = None  # 특성 배열
     weekendProportion: Optional[int] = None
 
-    model_config = ConfigDict(from_attributes=True)
+    userId: Optional[Link[User]]
+
+    class Settings:
+        collection = "UserInfo"

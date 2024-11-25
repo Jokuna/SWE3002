@@ -1,10 +1,14 @@
-from pydantic import BaseModel, ConfigDict
+from beanie import Document, Link
 from typing import Optional
 
-class UserSettings(BaseModel):
-    id: int
+from app.models.users import User
+
+class UserSettings(Document):
+    # id: int
     isOpenAge: Optional[bool] = False
     isOpenMajor: Optional[bool] = False
     isBasicInfoEntered: Optional[bool] = False
+    userId: Optional[Link[User]]
 
-    model_config = ConfigDict(from_attributes=True)
+    class Settings:
+        collection = "UserSettings"
