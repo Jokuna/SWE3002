@@ -6,4 +6,5 @@ from app.models.users import User
 from app.models.usersettings import UserSettings
 
 # Beanie에서 사용할 Model 리스트
-__all__ = ["ChatRoom", "Chat", "Message", "UserInfo", "User", "UserSettings"]
+__all__ = ["ChatRoom", "Chat", "Messages", "UserInfo", "User", "UserSettings"]
+models = [ChatRoom, Chat, Messages, UserInfo, User, UserSettings]

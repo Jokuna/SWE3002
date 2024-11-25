@@ -4,16 +4,21 @@ from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 
 # Database Setup
-from app.db.session import init_db
+from app.db.init_db import init_db, init_example
 
 # Router
 from app.api import example, chat, search, user
 
 load_dotenv()
-# init_db() # DB 생성
+
+# Lifespan 이벤트 핸들러
+async def lifespan(app: FastAPI):
+    await init_db()
+    # await init_example()
+    yield
 
 # FastAPI WEB 서버
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 # app.mount("/backend/public", StaticFiles(directory="public"), name="public")
 
 # Router
