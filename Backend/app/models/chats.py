@@ -1,10 +1,16 @@
-from pydantic import BaseModel, ConfigDict
+from beanie import Document, Link
 from typing import Optional
+from datetime import datetime
 
-class Chat(BaseModel):
-    id: int
-    userId1: Optional[int]  # 사용자 1 ID
-    userId2: Optional[int]  # 사용자 2 ID
-    chatRoomId: Optional[int]  # 채팅방 ID
+from app.models.users import User
+from app.models.chatrooms import ChatRoom
 
-    model_config = ConfigDict(from_attributes=True)
+class Chat(Document):
+    # id: int
+    userId1: Optional[Link[User]]  # 사용자 1 ID # 이거 _di
+    userId2: Optional[Link[User]]  # 사용자 2 ID
+    chatRoomId: Optional[Link[ChatRoom]]  # 채팅방 ID
+    created_at: datetime = datetime.utcnow()
+
+    class Settings:
+        collection = "Chats"
