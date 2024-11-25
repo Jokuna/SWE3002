@@ -4,7 +4,7 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from bson import ObjectId
-import jwt
+from jose import jwt
 
 from app.db import get_db
 from app.api.user.user_schema import *
@@ -158,7 +158,7 @@ async def modify_user_info(_user: ModifyUserInfo, db: AsyncIOMotorDatabase=Depen
         }
     }
     
-    result = await collection.update_one({"_id": _user.uid}, {"$set": update_fields})
+    result = await collection.update_one({"_id": ObjectId(_user.token["sub"])}, {"$set": update_fields})
     return {"msg": "UserInfo updated successfully"}
 
 # 프로필 변경 - 이름
@@ -169,7 +169,7 @@ async def modify_user_info_name(_user: ModifyUserInfoName, db: AsyncIOMotorDatab
     
     # Update the user's name based on user_id
     result = await collection.update_one(
-        {"_id": ObjectId(_user.uid)},
+        {"_id": ObjectId(_user.token["sub"])},
         {"$set": {"username": _user.username}}
     )
     

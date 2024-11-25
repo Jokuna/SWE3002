@@ -1,7 +1,12 @@
+from datetime import datetime
+
 import re
 
+from jose import jwt, JWTError
 from pydantic import BaseModel, field_validator, EmailStr
 from pydantic_core.core_schema import FieldValidationInfo
+
+from app.api.user.user_router import SECRET_KEY, ALGORITHM
 
 class LoginUser(BaseModel):
     email: EmailStr
@@ -69,7 +74,7 @@ class VerifyTokenUser(BaseModel):
     
 
 class ModifyUserInfo(BaseModel):
-    uid:                str
+    token:              str
     username:           str
     isMale:             bool
     dormitory:          int
@@ -86,6 +91,16 @@ class ModifyUserInfo(BaseModel):
     isOpenAge:          bool
     isOpenMajor:        bool
     isBasicInfoEntered: bool
+    
+    @field_validator("token")
+    def validate_token(cls, token):
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            if payload.get("exp") < datetime.now().timestamp():
+                raise ValueError("Token has expired")
+            return payload  # 반환값은 다음 단계에서 사용할 수 있음
+        except JWTError:
+            raise ValueError("Invalid token")
 
     @field_validator('username', 'dormitory', 'latestGPA', 'age', 'semester', 'major', 'selfIntroduction', 'weekendProportion', 'isOpenAge', 'isOpenMajor')
     def not_empty(cls, v):
@@ -100,10 +115,20 @@ class ModifyUserInfo(BaseModel):
         return v
     
 class ModifyUserInfoName(BaseModel):
-    uid: str
+    token: str
     username: str
     
-    @field_validator("uid", "username")
+    @field_validator("token")
+    def validate_token(cls, token):
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            if payload.get("exp") < datetime.now().timestamp():
+                raise ValueError("Token has expired")
+            return payload  # 반환값은 다음 단계에서 사용할 수 있음
+        except JWTError:
+            raise ValueError("Invalid token")
+    
+    @field_validator("username")
     def not_empty(cls, v):
         if not v or not v.strip():
             raise ValueError('빈 값은 허용되지 않습니다.')
