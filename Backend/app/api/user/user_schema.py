@@ -2,7 +2,6 @@ from datetime import datetime
 
 import re
 
-from jose import jwt, JWTError
 from pydantic import BaseModel, field_validator, EmailStr
 from pydantic_core.core_schema import FieldValidationInfo
 
@@ -40,7 +39,7 @@ class RegisterUser(BaseModel):
     isOpenAge:          bool
     isOpenMajor:        bool
 
-    @field_validator('email', 'username', 'dormitory', 'latestGPA', 'age', 'semester', 'major', 'selfIntroduction', 'weekendProportion', 'isOpenAge', 'isOpenMajor')
+    @field_validator('email', 'username', 'dormitory', 'latestGPA', 'sleepingTime', 'wakeTime', 'age', 'semester', 'major', 'selfIntroduction', 'weekendProportion')
     def not_empty(cls, v):
         if not v or not v.strip():
             raise ValueError('빈 값은 허용되지 않습니다.')
@@ -87,9 +86,8 @@ class ModifyUserInfo(BaseModel):
     weekendProportion:  int
     isOpenAge:          bool
     isOpenMajor:        bool
-    isBasicInfoEntered: bool
 
-    @field_validator('username', 'dormitory', 'latestGPA', 'age', 'semester', 'major', 'selfIntroduction', 'weekendProportion', 'isOpenAge', 'isOpenMajor')
+    @field_validator('username', 'dormitory', 'latestGPA', 'sleepingTime', 'wakeTime', 'age', 'semester', 'major', 'selfIntroduction', 'weekendProportion')
     def not_empty(cls, v):
         if not v or not v.strip():
             raise ValueError('빈 값은 허용되지 않습니다.')
