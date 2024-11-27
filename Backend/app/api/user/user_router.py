@@ -11,7 +11,7 @@ from app.api.user.user_crud import create_passkey, send_passkey_email
 from app.api.user.user_schema import *
 from app.services.session import sessions
 
-def transform_object_id(data):
+def transform_object_id(data: dict):
     if data and "_id" in data:
         data["_id"] = str(data["_id"])
     return data
@@ -36,10 +36,11 @@ async def hello():
 # 로그인 & signup 시 인증 검증용으로도 가능?
 @router.post("/login")
 async def login(_user: LoginUser, response: Response, db: AsyncIOMotorDatabase=Depends(get_db)):
-    user = await db["User"].find_one({"email": _user.email, "passkey": _user.passkey})
-
+    user: dict = await db["users"].find_one({"email": _user.email})
     if not user:
-        raise HTTPException(status_code=401, detail="Invalid email or passkey")
+        raise HTTPException(status_code=401, detail="Invalid email")
+    elif _user.passkey != user["passkey"]:
+        raise HTTPException(status_code=401, detail="Invalid passkey")
 
     session_id = str(uuid.uuid4())
     sessions[session_id] = transform_object_id(user)
@@ -68,7 +69,7 @@ async def register(_user: RegisterUser, db: AsyncIOMotorDatabase=Depends(get_db)
     # Check if user already exists    
     existing_user = await collection.find_one({"email": _user.email})
     if not existing_user:
-        return {"msg": "User does not exist"}, 404
+        return {"message": "User does not exist"}, 404
     
     update_fields = {
         "username": _user.username,
@@ -93,7 +94,7 @@ async def register(_user: RegisterUser, db: AsyncIOMotorDatabase=Depends(get_db)
         }
     }
     result = await collection.update_one({"email": _user.email}, {"$set": update_fields})
-    return {"msg": "User updated successfully"}
+    return {"message": "User updated successfully"}
     
 
 # 인증코드 생성 후, 이메일 전송
@@ -122,7 +123,7 @@ async def genToken(_user: GenTokenUser, db: AsyncIOMotorDatabase=Depends(get_db)
             {"$set": {"passkey": passkey, "passkeySentTime": sent_time}}
         )
         
-    return {"msg", "Successfully send passkey"}
+    return {"message": "Successfully send passkey"}
 
 # 현재 로그인 상태 확인
 @router.get("/me")
@@ -194,7 +195,7 @@ async def modify_user_info(request: Request, _user: ModifyUserInfo, db: AsyncIOM
     }
     
     result = await collection.update_one({"_id": ObjectId(session_id)}, {"$set": update_fields})
-    return {"msg": "UserInfo updated successfully"}
+    return {"message": "UserInfo updated successfully"}
 
 # 프로필 변경 - 이름
 @router.post("/profile/name")
@@ -213,6 +214,6 @@ async def modify_user_info_name(request: Request, _user: ModifyUserInfoName, db:
     )
     
     if result.modified_count == 1:
-        return {"msg": "User name updated successfully"}
+        return {"message": "User name updated successfully"}
     else:
-        return {"msg": "User not found or name not modified"}
+        return {"message": "User not found or name not modified"}
