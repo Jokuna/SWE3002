@@ -10,7 +10,7 @@ class Messages(Document):
     writerId: Optional[Link[User]] # Optional[int]  # 작성자 ID
     text: str
     writeTime: datetime = datetime.utcnow()
-    chatId: Optional[Link[Chat]] # chat 그룹은 알아야지
+    chatId: str# Optional[Link[Chat]] # chat 그룹은 알아야지
 
     class Settings:
         collection = "Messages"
