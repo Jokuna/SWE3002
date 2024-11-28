@@ -46,19 +46,21 @@ async def login(_user: LoginUser, db: AsyncIOMotorDatabase=Depends(get_db)):
     return {"msg": "Login successful", "token": token}
 
 # 로그아웃 (클라이언트에서 발급한 토큰을 삭제하는 형식으로 구현?)
+# JWT 방식이므로, 구현 X
 @router.post("/logout")
 async def logout(db: AsyncIOMotorDatabase=Depends(get_db)):
     return "logout"
 
 # 회원가입
+# 이메일, passkey 검증 후 회원가입
 @router.post("/register")
-async def register(_user: RegisterUser, db: AsyncIOMotorDatabase=Depends(get_db)):
-    collection = db["users"]
+async def register(_user: RegisterUser_passkey, db: AsyncIOMotorDatabase=Depends(get_db)):
+    collection = db["User"]
     
     # Check if user already exists    
-    existing_user = await collection.find_one({"email": _user.email})
+    existing_user = await collection.find_one({"email": _user.email, "passkey": _user.passkey})
     if not existing_user:
-        return {"msg": "User does not exist"}, 404
+        raise HTTPException(status_code=404, detail="User does not exist")
     
     update_fields = {
         "username": _user.username,
@@ -94,7 +96,7 @@ async def genToken(_user: GenTokenUser, db: AsyncIOMotorDatabase=Depends(get_db)
     passkey = create_passkey()
     sent_time = send_passkey_email(_user.email, passkey)
     
-    collection = db["users"]
+    collection = db["User"]
     
     # Check if user exists first
     user = await collection.find_one({"email": _user.email})
@@ -122,7 +124,7 @@ async def genToken(_user: GenTokenUser, db: AsyncIOMotorDatabase=Depends(get_db)
 # 프로필 조회
 @router.get("/profile/{user_id}")
 async def get_user_info(user_id: str, db: AsyncIOMotorDatabase=Depends(get_db)):
-    collection = db["users"]
+    collection = db["User"]
     _user = await collection.find_one({"_id": ObjectId(user_id)})
     _user["_id"] = user_id # ObjectId type can not be iterable
     
@@ -131,7 +133,7 @@ async def get_user_info(user_id: str, db: AsyncIOMotorDatabase=Depends(get_db)):
 # 프로필 변경
 @router.post("/profile")
 async def modify_user_info(_user: ModifyUserInfo, db: AsyncIOMotorDatabase=Depends(get_db)):
-    collection = db["users"]
+    collection = db["User"]
     
     update_fields = {
         "username": _user.username,
@@ -163,7 +165,7 @@ async def modify_user_info(_user: ModifyUserInfo, db: AsyncIOMotorDatabase=Depen
 @router.post("/profile/name")
 async def modify_user_info_name(_user: ModifyUserInfoName, db: AsyncIOMotorDatabase=Depends(get_db)):
     
-    collection = db["users"]
+    collection = db["User"]
     
     # Update the user's name based on user_id
     result = await collection.update_one(
