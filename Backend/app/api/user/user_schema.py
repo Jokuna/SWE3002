@@ -5,8 +5,7 @@ import re
 from jose import jwt, JWTError
 from pydantic import BaseModel, field_validator, EmailStr
 from pydantic_core.core_schema import FieldValidationInfo
-
-from app.api.user.user_router import SECRET_KEY, ALGORITHM
+from app.api.user.jwt import SECRET_KEY, ALGORITHM
 
 class LoginUser(BaseModel):
     email: EmailStr

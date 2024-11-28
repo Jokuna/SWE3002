@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
 from motor.motor_asyncio import AsyncIOMotorDatabase
@@ -9,9 +9,7 @@ from jose import jwt
 from app.db import get_db
 from app.api.user.user_schema import *
 from app.api.user.user_crud import create_passkey, send_passkey_email
-
-SECRET_KEY: str = os.getenv("SECRET_KEY")
-ALGORITHM: str = os.getenv("ALGORITHM")
+from app.api.user.jwt import SECRET_KEY, ALGORITHM
 
 '''
 계정 관리 API
@@ -33,19 +31,19 @@ async def hello():
 # 로그인 & signup 시 인증 검증용으로도 가능?
 @router.post("/login")
 async def login(_user: LoginUser, db: AsyncIOMotorDatabase=Depends(get_db)):
-    collection = db["users"]
+    collection = db["User"]
     user = await collection.find_one({"email": _user.email})
+
+    if not user and user["passkey"] == _user.passkey:
+        raise HTTPException(status_code=401, detail="Invalid email or passkey")
+
+    # JWT 토큰 발행
+    token = jwt.encode({
+        "sub": str(user["_id"]), 
+        "exp": datetime.now() + timedelta(hours=24)}, 
+        SECRET_KEY, algorithm=ALGORITHM)
     
-    if user and user["passkey"] == _user.passkey:
-        # JWT 토큰 발행
-        token = jwt.encode({
-            "sub": str(user["_id"]), 
-            "exp": datetime.now() + datetime.timedelta(hours=24)}, 
-            SECRET_KEY, algorithm=ALGORITHM)
-        
-        return {"msg": "Login successful", "token": token}
-    else:
-        return {"msg": "Invalid email or passkey"}, 401
+    return {"msg": "Login successful", "token": token}
 
 # 로그아웃 (클라이언트에서 발급한 토큰을 삭제하는 형식으로 구현?)
 @router.post("/logout")
