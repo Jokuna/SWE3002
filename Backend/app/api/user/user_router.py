@@ -28,13 +28,13 @@ async def hello():
 인증 API
 '''
 
-# 로그인 & signup 시 인증 검증용으로도 가능?
+# 로그인 & signup 시 인증 검증
 @router.post("/login")
 async def login(_user: LoginUser, db: AsyncIOMotorDatabase=Depends(get_db)):
     collection = db["User"]
-    user = await collection.find_one({"email": _user.email})
+    user: dict = await collection.find_one({"email": _user.email})
 
-    if not user and user["passkey"] == _user.passkey:
+    if not user or user["passkey"] != _user.passkey:
         raise HTTPException(status_code=401, detail="Invalid email or passkey")
 
     # JWT 토큰 발행
@@ -54,7 +54,7 @@ async def logout(db: AsyncIOMotorDatabase=Depends(get_db)):
 # 회원가입
 # 이메일, passkey 검증 후 회원가입
 @router.post("/register")
-async def register(_user: RegisterUser_passkey, db: AsyncIOMotorDatabase=Depends(get_db)):
+async def register(_user: RegisterUser, db: AsyncIOMotorDatabase=Depends(get_db)):
     collection = db["User"]
     
     # Check if user already exists    
@@ -114,7 +114,7 @@ async def genToken(_user: GenTokenUser, db: AsyncIOMotorDatabase=Depends(get_db)
             {"$set": {"passkey": passkey, "passkeySentTime": sent_time}}
         )
         
-    return {"msg", "Successfully send passkey"}
+    return {"msg": "Successfully send passkey"}
 
 # 탈퇴 .. 구현 X
 
@@ -125,10 +125,14 @@ async def genToken(_user: GenTokenUser, db: AsyncIOMotorDatabase=Depends(get_db)
 @router.get("/profile/{user_id}")
 async def get_user_info(user_id: str, db: AsyncIOMotorDatabase=Depends(get_db)):
     collection = db["User"]
-    _user = await collection.find_one({"_id": ObjectId(user_id)})
-    _user["_id"] = user_id # ObjectId type can not be iterable
+    user: dict = await collection.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid user id")
     
-    return _user
+    user["_id"] = user_id # ObjectId type can not be iterable
+    del user["passkey"] # passkey는 frontend로 전달하지 않는다.
+    
+    return user
 
 # 프로필 변경
 @router.post("/profile")
