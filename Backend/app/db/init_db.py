@@ -23,7 +23,7 @@ async def init_example(): # 더미 데이터 삽입
     new_user = User(
         # id=1,
         uid="abc123",
-        email="test@example.com",
+        email="test@skku.edu",
         passkey="123456789",
         username="test_user"
     )
@@ -47,7 +47,7 @@ async def init_example(): # 더미 데이터 삽입
     new_user2 = User(
         # id=1,
         uid="xyz123",
-        email="test@example.com",
+        email="test@g.skku.edu",
         passkey="123456789",
         username="test_user"
     )
@@ -82,10 +82,18 @@ async def init_example(): # 더미 데이터 삽입
     await chatroom.insert()
 
     # Chat 데이터 삽입
-    chat = Chat(userId1=new_user.id, userId2=new_user2.id, chatRoomId=chatroom.id)
+    chat = Chat(userId1=new_user.id, userId2=new_user2.id, chatRoomId=str(chatroom.id))
     await chat.insert()
 
     # Messages 데이터 삽입
-    message = Messages(writerId=new_user.id, text="Hello!", chatId=chat.id)
+    message = Messages(writerId=new_user.id, text="Hello!", chatId=str(chat.id))
     await message.insert()
+
+    # Messages 데이터 삽입
+    message2 = Messages(writerId=new_user.id, text="Hello!2", chatId=str(chat.id))
+    await message2.insert()
+
+    # Messages 데이터 삽입
+    message3 = Messages(writerId=new_user.id, text="Hello!3", chatId=str(chat.id))
+    await message3.insert()
 
