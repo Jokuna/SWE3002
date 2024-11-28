@@ -9,7 +9,7 @@ class Chat(Document):
     # id: int
     userId1: Optional[Link[User]]  # 사용자 1 ID # 이거 _di
     userId2: Optional[Link[User]]  # 사용자 2 ID
-    chatRoomId: Optional[Link[ChatRoom]]  # 채팅방 ID
+    chatRoomId: str # 채팅방 ID
     created_at: datetime = datetime.utcnow()
 
     class Settings:
