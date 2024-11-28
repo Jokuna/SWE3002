@@ -53,6 +53,22 @@ class RegisterUser(BaseModel):
             raise ValueError('빈 값은 허용되지 않습니다.')
         return v
 
+class RegisterUser_passkey(RegisterUser):
+    passkey: str
+    
+    @field_validator('email', 'passkey')
+    def not_empty(cls, v):
+        if not v or not v.strip():
+            raise ValueError('빈 값은 허용되지 않습니다.')
+        return v
+    
+    @field_validator("email")
+    def not_skku_email(cls, v):
+        if not re.match("^[a-zA-Z0-9._%+-]+@(g\.)?skku\.edu$", v):
+            raise ValueError('\'@g.skku.edu\' 나 \'@skku.edu\'만 사용할 수 있습니다.')
+        return v
+    
+
 class GenTokenUser(BaseModel):
     email: EmailStr
     
