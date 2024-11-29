@@ -82,7 +82,7 @@ async def init_example(): # 더미 데이터 삽입
     await chatroom.insert()
 
     # Chat 데이터 삽입
-    chat = Chat(userId1=new_user.id, userId2=new_user2.id, chatRoomId=str(chatroom.id))
+    chat = Chat(userId1=str(new_user.id), userId2=str(new_user2.id), chatRoomId=str(chatroom.id))
     await chat.insert()
 
     # Messages 데이터 삽입

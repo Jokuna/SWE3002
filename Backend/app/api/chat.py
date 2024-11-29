@@ -20,9 +20,50 @@ router = APIRouter(
     tags=["chat"]
 )
 
-@router.get("/")
-async def hello():
-    return "Hello World"
+@router.post("/list")
+async def get_chat_room_list(_user: ModifyUserInfoName, db: AsyncIOMotorDatabase=Depends(get_db)):
+    # Name은 안씀
+    my_id =  _user.token["sub"]
+
+    print(my_id)
+
+     # 1. 권한 확인
+    existing_user = await db["User"].find_one({ "_id": ObjectId(my_id)})
+    if not existing_user:
+        raise HTTPException(status_code=403, detail="User does not exist")
+    
+    query = {
+        "$and": [
+            {
+                "$or": [
+                    {"userId1": my_id},
+                    {"userId2": my_id}
+                ]
+            }
+        ]
+    }
+
+    messages_cursor = db["Chat"].find(query)
+    messages = await messages_cursor.to_list(length=None)
+    messages_json = dumps(messages)
+    
+    dictionary = json.loads(messages_json)
+    return dictionary
+
+@router.post("/info")
+async def get_chat_room_list(chat_id: str, db: AsyncIOMotorDatabase=Depends(get_db)):
+    existing_room = await db["Chat"].find_one({ "_id": ObjectId(chat_id)})
+
+    messages_json = dumps(existing_room)
+    dictionary = json.loads(messages_json)
+    
+    return dictionary
+
+@router.get("/jwt")
+async def get_chat_room_list(token: str, db: AsyncIOMotorDatabase=Depends(get_db)):
+    # return user_id
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    return payload
 
 # 채팅방 생성
 @router.post("/create")
@@ -48,7 +89,7 @@ async def create_chat_room(_user: ModifyUserInfoName, target_user_id: str,
     chatroom = ChatRoom()
     await chatroom.insert()
 
-    chat = Chat(userId1=ObjectId(my_id), userId2=ObjectId(target_user_id), chatRoomId=str(chatroom.id))
+    chat = Chat(userId1=str(my_id), userId2=str(target_user_id), chatRoomId=str(chatroom.id))
     await chat.insert()
 
     return {
