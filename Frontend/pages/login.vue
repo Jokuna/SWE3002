@@ -8,7 +8,7 @@
     <div class="w-full max-w-md bg-white p-6">
       <h2 class="text-xl font-semibold text-gray-800 mb-4">Log in</h2>
 
-      <form class="space-y-4">
+      <form class="space-y-4" @submit.prevent="login">
         <!-- Email Input -->
         <div>
           <!-- <label for="email" class="block text-sm font-medium text-gray-700">
@@ -19,6 +19,7 @@
               id="email"
               type="email"
               placeholder="Email Address"
+              v-model="email"
               class="w-full border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -37,6 +38,7 @@
               id="verification"
               type="text"
               placeholder="Verification Code"
+              v-model="password"
               class="flex-1 border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
@@ -61,7 +63,7 @@
           type="submit"
           class="w-full bg-blue-500 text-white py-2 text-sm font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <NuxtLink to="/chat"> Login </NuxtLink>
+          Login
         </button>
       </form>
 
@@ -82,12 +84,47 @@
   </div>
 </template>
 
-<script>
-export default {
-  head() {
-    return {
-      title: 'SKKU-Dormie for find dormate'
-    };
+<script setup>
+import { ref } from 'vue';
+import { useNuxtApp } from '#app';
+
+const { $store } = useNuxtApp();
+
+const email = ref('');
+const password = ref('');
+
+const login = async () => {
+  if (!email.value) {
+    alert('Please re-enter your Email.');
+    return;
+  }
+
+  if (!password.value) {
+    alert('Please re-enter your passkey.');
+  }
+
+  try {
+    const data = await $fetch('/backend/user/login', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email.value,
+        passkey: password.value
+      })
+    });
+
+    console.log(data);
+    $store.commit('setToken', data.token);
+    await navigateTo('/chat');
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      alert('Login failed. Please check your email and passkey.');
+    } else {
+      alert('An unexpected error occurred. Please try again later.');
+    }
   }
 };
 </script>
