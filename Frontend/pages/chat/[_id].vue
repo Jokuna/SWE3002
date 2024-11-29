@@ -13,75 +13,34 @@
       <!-- Timestamp -->
       <p class="text-center text-gray-500 text-xs mb-4">10:30</p>
 
-      <!-- Incoming Message -->
-      <div class="flex items-start space-x-2 mb-4">
-        <img
-          src="https://via.placeholder.com/40"
-          alt="Avatar"
-          class="w-10 h-10 rounded-full"
-        />
-        <div class="bg-blue-100 text-blue-800 p-3 rounded-lg max-w-xs">
-          <p>Greetings!</p>
-        </div>
-      </div>
+      <!-- V-for -->
+      <div v-for="(message, index) in dataSource" :key="index">
+        <div
+          v-if="user_id == message.writerId.$id.$oid"
+          class="flex items-start space-x-2 mb-4"
+        >
+          <!-- 아바타 -->
+          <img
+            :src="message.avatar || 'https://via.placeholder.com/40'"
+            alt="Avatar"
+            class="w-10 h-10 rounded-full"
+          />
 
-      <!-- Outgoing Message -->
-      <div class="flex items-start justify-end space-x-2 mb-4">
-        <div class="bg-gray-300 text-gray-800 p-3 rounded-lg max-w-xs">
-          <p>Hello, how are you?</p>
+          <!-- 메시지 내용 -->
+          <div class="bg-blue-100 text-blue-800 p-3 rounded-lg max-w-xs">
+            <p>{{ message.text }}</p>
+          </div>
         </div>
-        <img
-          src="https://via.placeholder.com/40"
-          alt="Avatar"
-          class="w-10 h-10 rounded-full"
-        />
-      </div>
 
-      <!-- Outgoing Message -->
-      <div class="flex items-start justify-end space-x-2 mb-4">
-        <div class="bg-gray-300 text-gray-800 p-3 rounded-lg max-w-xs">
-          <p>Are you finding Dormate for Ji-kwan?</p>
-        </div>
-        <img
-          src="https://via.placeholder.com/40"
-          alt="Avatar"
-          class="w-10 h-10 rounded-full"
-        />
-      </div>
-
-      <!-- Incoming Message -->
-      <div class="flex items-start space-x-2 mb-4">
-        <img
-          src="https://via.placeholder.com/40"
-          alt="Avatar"
-          class="w-10 h-10 rounded-full"
-        />
-        <div class="bg-blue-100 text-blue-800 p-3 rounded-lg max-w-xs">
-          <p>Yes, I'm looking for someone who sleeps early.</p>
-        </div>
-      </div>
-
-      <!-- Outgoing Message -->
-      <div class="flex items-start justify-end space-x-2 mb-4">
-        <div class="bg-gray-300 text-gray-800 p-3 rounded-lg max-w-xs">
-          <p>That's exactly me. I usually go to bed at 9pm.</p>
-        </div>
-        <img
-          src="https://via.placeholder.com/40"
-          alt="Avatar"
-          class="w-10 h-10 rounded-full"
-        />
-      </div>
-
-      <!-- Incoming Message -->
-      <div class="flex items-start space-x-2">
-        <img
-          src="https://via.placeholder.com/40"
-          alt="Avatar"
-          class="w-10 h-10 rounded-full"
-        />
-        <div class="bg-blue-100 text-blue-800 p-3 rounded-lg max-w-xs">
-          <p>That seems too early...</p>
+        <div v-else class="flex items-start justify-end space-x-2 mb-4">
+          <div class="bg-gray-300 text-gray-800 p-3 rounded-lg max-w-xs">
+            <p>{{ message.text }}</p>
+          </div>
+          <img
+            src="https://via.placeholder.com/40"
+            alt="Avatar"
+            class="w-10 h-10 rounded-full"
+          />
         </div>
       </div>
     </div>
@@ -133,3 +92,57 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { onMounted, onUnmounted, ref, watch, nextTick } from 'vue';
+import { useRoute } from 'vue-router';
+import { useNuxtApp } from '#app';
+
+const { $store } = useNuxtApp();
+
+const route = useRoute();
+const chatroom_id = computed(() => route.params._id);
+
+console.log(chatroom_id.value);
+
+const dataSource = ref([]);
+const user_id = ref('');
+
+async function decodeJwt(token) {
+  const result = await $fetch(`/backend/chat/jwt?token=${token}`, {
+    headers: {
+      accept: 'application/json'
+    },
+    method: 'GET'
+  });
+  const { sub } = result;
+  return sub;
+}
+
+function getUser_id() {
+  if ($store.state.token == '') {
+    return;
+  }
+  const data = decodeJwt($store.state.token);
+  user_id.value = data;
+  return data;
+}
+
+const getHistory = async (chatroom_id) => {
+  const data = await $fetch(`/backend/chat/history/${chatroom_id}`, {
+    headers: {
+      accept: 'application/json'
+    },
+    method: 'GET'
+  });
+
+  dataSource.value = data;
+};
+
+getUser_id();
+getHistory(chatroom_id.value);
+console.log(dataSource);
+console.log(dataSource.value);
+
+onMounted(() => {});
+</script>

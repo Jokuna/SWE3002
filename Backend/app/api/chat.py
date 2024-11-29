@@ -59,6 +59,12 @@ async def get_chat_room_list(chat_id: str, db: AsyncIOMotorDatabase=Depends(get_
     
     return dictionary
 
+@router.get("/jwt")
+async def get_chat_room_list(token: str, db: AsyncIOMotorDatabase=Depends(get_db)):
+    # return user_id
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    return payload
+
 # 채팅방 생성
 @router.post("/create")
 async def create_chat_room(_user: ModifyUserInfoName, target_user_id: str,
