@@ -9,15 +9,15 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "prepare": "cd .. && husky Frontend/.husky",
-    "prettier-format": "prettier --config .prettierrc './**/*.vue' --write",
+    "prettier-format": "prettier --config .prettierrc ./**/*.vue --write",
     "prod": "node ./.output/server/index.mjs"
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.11.4",
     "nuxt": "^3.11.2",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@nuxt/eslint": "^0.3.6",
