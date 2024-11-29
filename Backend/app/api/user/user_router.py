@@ -176,8 +176,9 @@ async def modify_user_info_name(_user: ModifyUserInfoName, db: AsyncIOMotorDatab
         {"_id": ObjectId(_user.token["sub"])},
         {"$set": {"username": _user.username}}
     )
+    print(result.modified_count)
     
     if result.modified_count == 1:
         return {"msg": "User name updated successfully"}
     else:
-        return {"msg": "User not found or name not modified"}
+        raise HTTPException(401, "User not found or name not modified")

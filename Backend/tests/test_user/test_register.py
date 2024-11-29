@@ -143,139 +143,64 @@ async def test_register_blank_validation(mock_db: AsyncMock, client: AsyncClient
     response = await client.post("/backend/user/register", json=user_data)
     
     assert response.status_code == 422
-    assert response.json() == {
-        "detail": [
-            {
-            "type": "value_error",
-            "loc": [
-                "body",
-                "email"
-            ],
-            "msg": "value is not a valid email address: An email address must have an @-sign.",
-            "input": "",
-            "ctx": {
-                "reason": "An email address must have an @-sign."
-            }
-            },
-            {
-            "type": "value_error",
-            "loc": [
-                "body",
-                "passkey"
-            ],
-            "msg": "Value error, 빈 값은 허용되지 않습니다.",
-            "input": "",
-            "ctx": {
-                "error": {}
-            }
-            },
-            {
-            "type": "value_error",
-            "loc": [
-                "body",
-                "username"
-            ],
-            "msg": "Value error, 빈 값은 허용되지 않습니다.",
-            "input": "",
-            "ctx": {
-                "error": {}
-            }
-            },
-            {
-            "type": "value_error",
-            "loc": [
-                "body",
-                "dormitory"
-            ],
-            "msg": "Value error, 0은 허용되지 않습니다.",
-            "input": 0,
-            "ctx": {
-                "error": {}
-            }
-            },
-            {
-            "type": "value_error",
-            "loc": [
-                "body",
-                "sleepingTime"
-            ],
-            "msg": "Value error, 빈 값은 허용되지 않습니다.",
-            "input": "",
-            "ctx": {
-                "error": {}
-            }
-            },
-            {
-            "type": "value_error",
-            "loc": [
-                "body",
-                "wakeTime"
-            ],
-            "msg": "Value error, 빈 값은 허용되지 않습니다.",
-            "input": "",
-            "ctx": {
-                "error": {}
-            }
-            },
-            {
-            "type": "value_error",
-            "loc": [
-                "body",
-                "age"
-            ],
-            "msg": "Value error, 0은 허용되지 않습니다.",
-            "input": 0,
-            "ctx": {
-                "error": {}
-            }
-            },
-            {
-            "type": "value_error",
-            "loc": [
-                "body",
-                "semester"
-            ],
-            "msg": "Value error, 0은 허용되지 않습니다.",
-            "input": 0,
-            "ctx": {
-                "error": {}
-            }
-            },
-            {
-            "type": "value_error",
-            "loc": [
-                "body",
-                "major"
-            ],
-            "msg": "Value error, 빈 값은 허용되지 않습니다.",
-            "input": "",
-            "ctx": {
-                "error": {}
-            }
-            },
-            {
-            "type": "value_error",
-            "loc": [
-                "body",
-                "selfIntroduction"
-            ],
-            "msg": "Value error, 빈 값은 허용되지 않습니다.",
-            "input": "",
-            "ctx": {
-                "error": {}
-            }
-            },
-            {
-            "type": "value_error",
-            "loc": [
-                "body",
-                "trait"
-            ],
-            "msg": "Value error, 빈 값은 허용되지 않습니다.",
-            "input": [],
-            "ctx": {
-                "error": {}
-            }
-            }
-        ]
-    }
+    assert response.json() ==   {'detail': [{'ctx': {'reason': 'An email address must have an @-sign.'},
+               'input': '',
+               'loc': ['body', 'email'],
+               'msg': 'value is not a valid email address: An email address must '
+                      'have an @-sign.',
+               'type': 'value_error'},
+              {'ctx': {'error': {}},
+               'input': '',
+               'loc': ['body', 'passkey'],
+               'msg': 'Value error, 빈 값은 허용되지 않습니다.',
+               'type': 'value_error'},
+              {'ctx': {'error': {}},
+               'input': '',
+               'loc': ['body', 'username'],
+               'msg': 'Value error, 빈 값은 허용되지 않습니다.',
+               'type': 'value_error'},
+              {'ctx': {'error': {}},
+               'input': 0,
+               'loc': ['body', 'dormitory'],
+               'msg': 'Value error, 0은 허용되지 않습니다.',
+               'type': 'value_error'},
+              {'ctx': {'error': {}},
+               'input': 0.0,
+               'loc': ['body', 'latestGPA'],
+               'msg': 'Value error, GPA는 0.0이 될 수 없습니다.',
+               'type': 'value_error'},
+              {'ctx': {'error': {}},
+               'input': '',
+               'loc': ['body', 'sleepingTime'],
+               'msg': 'Value error, 빈 값은 허용되지 않습니다.',
+               'type': 'value_error'},
+              {'ctx': {'error': {}},
+               'input': '',
+               'loc': ['body', 'wakeTime'],
+               'msg': 'Value error, 빈 값은 허용되지 않습니다.',
+               'type': 'value_error'},
+              {'ctx': {'error': {}},
+               'input': 0,
+               'loc': ['body', 'age'],
+               'msg': 'Value error, 0은 허용되지 않습니다.',
+               'type': 'value_error'},
+              {'ctx': {'error': {}},
+               'input': 0,
+               'loc': ['body', 'semester'],
+               'msg': 'Value error, 0은 허용되지 않습니다.',
+               'type': 'value_error'},
+              {'ctx': {'error': {}},
+               'input': '',
+               'loc': ['body', 'major'],
+               'msg': 'Value error, 빈 값은 허용되지 않습니다.',
+               'type': 'value_error'},
+              {'ctx': {'error': {}},
+               'input': '',
+               'loc': ['body', 'selfIntroduction'],
+               'msg': 'Value error, 빈 값은 허용되지 않습니다.',
+               'type': 'value_error'},
+              {'ctx': {'error': {}},
+               'input': [],
+               'loc': ['body', 'trait'],
+               'msg': 'Value error, 빈 값은 허용되지 않습니다.',
+               'type': 'value_error'}]}
