@@ -119,11 +119,11 @@ async function decodeJwt(token) {
   return sub;
 }
 
-function getUser_id() {
+async function getUser_id() {
   if ($store.state.token == '') {
     return;
   }
-  const data = decodeJwt($store.state.token);
+  const data = await decodeJwt($store.state.token);
   user_id.value = data;
   return data;
 }
