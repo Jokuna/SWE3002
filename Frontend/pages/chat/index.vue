@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col h-screen bg-gray-100">
     <!-- Header -->
-    <div class="text-center border-b py-4 bg-white">
+    <!-- <div class="text-center border-b py-4 bg-white">
       <h1 class="text-xl font-bold text-gray-800">Message Box</h1>
-    </div>
+    </div> -->
 
     <!-- Message List -->
     <div class="flex-1 bg-white overflow-y-auto">
