@@ -73,7 +73,7 @@
 export default {
   head() {
     return {
-      title: 'Login - DormMate Matching'
+      title: 'SKKU-Dormie for find dormate'
     };
   }
 };
