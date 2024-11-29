@@ -58,12 +58,12 @@
 
       <!-- Footer -->
       <div class="text-center mt-6">
-        <a
-          href="#"
+        <NuxtLink
+          to="/signup"
           class="text-sm text-gray-500 hover:text-blue-500 hover:underline"
         >
           I Don't Have Account
-        </a>
+        </NuxtLink>
       </div>
     </div>
   </div>
