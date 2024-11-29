@@ -16,7 +16,7 @@
           <!-- Placeholder for Profile Image -->
         </div>
         <p class="mt-4 text-lg font-medium text-gray-800">
-          Hi, I&apos;m Hungry Donut.
+          Hi, I&apos;m {{ dataProfile.username }}.
         </p>
         <p class="text-gray-600">I am :</p>
       </div>
@@ -51,6 +51,7 @@
     <div class="px-6 py-4">
       <button
         type="button"
+        @click="createChatRoom"
         class="w-full bg-blue-500 text-white py-3 rounded text-sm font-medium hover:bg-blue-600"
       >
         Gonna chat with her/him
@@ -84,3 +85,52 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { useRoute } from 'vue-router';
+import { useNuxtApp } from '#app';
+
+const { $store } = useNuxtApp();
+
+const route = useRoute();
+const dataProfile = ref([]);
+
+const getprofile = async () => {
+  const data = await $fetch(`/backend/user/profile/${route.params._id}`, {
+    headers: {
+      accept: 'application/json'
+    },
+    method: 'GET'
+  });
+
+  console.log(data);
+  dataProfile.value = data;
+
+  // 추가로, user info 가져오는 기능 구현
+};
+
+const createChatRoom = async () => {
+  // 채팅방 생성
+
+  const data = await $fetch(
+    `/backend/chat/create?target_user_id=${dataProfile.value._id}`,
+    {
+      headers: {
+        accept: 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        token: $store.state.token,
+        username: 'dummy'
+      })
+    }
+  );
+
+  const { chatroom_id } = data;
+
+  // 채팅방 이동
+  await navigateTo(`/chat/${chatroom_id}`);
+};
+
+getprofile();
+</script>
