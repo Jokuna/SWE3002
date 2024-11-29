@@ -25,10 +25,11 @@ class LoginUser(BaseModel):
     
 class RegisterUser(BaseModel):
     email:              EmailStr
+    passkey:            str
     username:           str
     isMale:             bool
     dormitory:          int
-    latestGPA:          float
+    latestGPA:          float 
     isSmoke:            bool
     sleepingTime:       str
     wakeTime:           str
@@ -41,24 +42,27 @@ class RegisterUser(BaseModel):
     isOpenAge:          bool
     isOpenMajor:        bool
 
-    @field_validator('email', 'username', 'dormitory', 'latestGPA', 'age', 'semester', 'major', 'selfIntroduction', 'weekendProportion', 'isOpenAge', 'isOpenMajor')
+    @field_validator('email', 'passkey', 'username', 'sleepingTime', 'wakeTime', 'major', 'selfIntroduction')
     def not_empty(cls, v):
         if not v or not v.strip():
             raise ValueError('빈 값은 허용되지 않습니다.')
+        return v
+    
+    @field_validator('dormitory', 'age', 'semester')
+    def not_zero(cls, v):
+        if not v:
+            raise ValueError('0은 허용되지 않습니다.')
+        return v
+    
+    @field_validator('latestGPA')
+    def not_zero_gpa(cls, v):
+        if v == 0.0:
+            raise ValueError('GPA는 0.0이 될 수 없습니다.')
         return v
     
     @field_validator('trait')
     def not_empty_traits(cls, v):
         if not v:
-            raise ValueError('빈 값은 허용되지 않습니다.')
-        return v
-
-class RegisterUser_passkey(RegisterUser):
-    passkey: str
-    
-    @field_validator('email', 'passkey')
-    def not_empty(cls, v):
-        if not v or not v.strip():
             raise ValueError('빈 값은 허용되지 않습니다.')
         return v
     
@@ -105,7 +109,6 @@ class ModifyUserInfo(BaseModel):
     weekendProportion:  int
     isOpenAge:          bool
     isOpenMajor:        bool
-    isBasicInfoEntered: bool
     
     @field_validator("token")
     def validate_token(cls, token):
@@ -117,10 +120,22 @@ class ModifyUserInfo(BaseModel):
         except JWTError:
             raise ValueError("Invalid token")
 
-    @field_validator('username', 'dormitory', 'latestGPA', 'age', 'semester', 'major', 'selfIntroduction', 'weekendProportion', 'isOpenAge', 'isOpenMajor')
+    @field_validator('username', 'sleepingTime', 'wakeTime', 'major', 'selfIntroduction')
     def not_empty(cls, v):
         if not v or not v.strip():
             raise ValueError('빈 값은 허용되지 않습니다.')
+        return v
+    
+    @field_validator('dormitory', 'age', 'semester')
+    def not_zero(cls, v):
+        if not v:
+            raise ValueError('0은 허용되지 않습니다.')
+        return v
+    
+    @field_validator('latestGPA')
+    def not_zero_gpa(cls, v):
+        if v == 0.0:
+            raise ValueError('GPA는 0.0이 될 수 없습니다.')
         return v
     
     @field_validator('trait')
