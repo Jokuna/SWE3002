@@ -1,7 +1,9 @@
 <template>
-  <div>index</div>
+  <div></div>
 </template>
-<script></script>
+<script setup>
+await navigateTo('/login');
+</script>
 
 <style>
 /* Optional custom styles */
