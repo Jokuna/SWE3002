@@ -23,25 +23,27 @@
             </div>
           </div>
           <div class="flex items-center space-x-2">
-            <span
-              v-if="item.unread"
-              class="w-2 h-2 bg-red-500 rounded-full"
-              title="Unread Message"
-            ></span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <NuxtLink to="/chat/1">
+              <span
+                v-if="item.unread"
+                class="w-2 h-2 bg-red-500 rounded-full"
+                title="Unread Message"
+              ></span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </NuxtLink>
           </div>
         </li>
       </ul>
@@ -49,18 +51,25 @@
 
     <!-- Bottom Navigation -->
     <div class="flex justify-around border-t bg-white py-4">
-      <button class="text-gray-500 flex flex-col items-center">
-        <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
-        <span class="text-xs mt-1">Search</span>
-      </button>
-      <button class="text-blue-500 flex flex-col items-center">
-        <div class="w-6 h-6 bg-blue-500 rounded-full"></div>
-        <span class="text-xs mt-1">Message</span>
-      </button>
-      <button class="text-gray-500 flex flex-col items-center">
-        <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
-        <span class="text-xs mt-1">Settings</span>
-      </button>
+      <NuxtLink to="/search">
+        <button class="text-gray-500 flex flex-col items-center">
+          <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+          <span class="text-xs mt-1">Search</span>
+        </button>
+      </NuxtLink>
+
+      <NuxtLink to="/chat">
+        <button class="text-blue-500 flex flex-col items-center">
+          <div class="w-6 h-6 bg-blue-500 rounded-full"></div>
+          <span class="text-xs mt-1">Message</span>
+        </button>
+      </NuxtLink>
+      <NuxtLink to="/settings">
+        <button class="text-gray-500 flex flex-col items-center">
+          <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+          <span class="text-xs mt-1">Settings</span>
+        </button>
+      </NuxtLink>
     </div>
   </div>
 </template>

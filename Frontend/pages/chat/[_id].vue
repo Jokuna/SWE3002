@@ -111,18 +111,25 @@
 
     <!-- Bottom Navigation -->
     <div class="flex justify-around border-t bg-white py-2">
-      <button class="text-blue-500 flex flex-col items-center">
-        <div class="w-6 h-6 bg-blue-500 rounded-full"></div>
-        <span class="text-xs mt-1">Search</span>
-      </button>
-      <button class="text-blue-500 flex flex-col items-center">
-        <div class="w-6 h-6 bg-blue-500 rounded-full"></div>
-        <span class="text-xs mt-1">Message</span>
-      </button>
-      <button class="text-gray-500 flex flex-col items-center">
-        <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
-        <span class="text-xs mt-1">Settings</span>
-      </button>
+      <NuxtLink to="/search">
+        <button class="text-gray-500 flex flex-col items-center">
+          <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+          <span class="text-xs mt-1">Search</span>
+        </button>
+      </NuxtLink>
+
+      <NuxtLink to="/chat">
+        <button class="text-blue-500 flex flex-col items-center">
+          <div class="w-6 h-6 bg-blue-500 rounded-full"></div>
+          <span class="text-xs mt-1">Message</span>
+        </button>
+      </NuxtLink>
+      <NuxtLink to="/settings">
+        <button class="text-gray-500 flex flex-col items-center">
+          <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+          <span class="text-xs mt-1">Settings</span>
+        </button>
+      </NuxtLink>
     </div>
   </div>
 </template>
