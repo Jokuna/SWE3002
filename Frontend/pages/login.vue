@@ -43,6 +43,7 @@
             />
             <button
               type="button"
+              @click="genKey"
               class="bg-blue-500 text-white px-3 py-2 text-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Get Code
@@ -126,6 +127,26 @@ const login = async () => {
       alert('An unexpected error occurred. Please try again later.');
     }
   }
+};
+
+const genKey = async () => {
+  if (!email.value) {
+    alert('Please re-enter your Email.');
+    return;
+  }
+
+  const data = await $fetch('/backend/user/genToken', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: {
+      email: email.value
+    }
+  });
+
+  alert(data.msg);
 };
 </script>
 
