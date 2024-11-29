@@ -8,16 +8,16 @@
       <h2 class="text-xl font-semibold text-gray-800 mb-4">Sign up</h2>
 
       <form class="space-y-4">
-        <!-- Mobile Number Input -->
+        <!-- Email Number Input -->
         <div>
-          <label for="mobile" class="block text-sm font-medium text-gray-700">
-            Mobile Number
+          <label for="email" class="block text-sm font-medium text-gray-700">
+            Email Address
           </label>
           <div class="mt-1 relative">
             <input
-              id="mobile"
-              type="tel"
-              placeholder="Mobile number"
+              id="email"
+              type="email"
+              placeholder="Email"
               class="w-full border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
