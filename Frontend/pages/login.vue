@@ -1,7 +1,8 @@
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-white">
     <!-- Header -->
-    <h1 class="text-2xl font-bold text-gray-800 mb-4">DormMate Matching</h1>
+    <h1 class="text-4xl font-bold text-gray-800 mb-4">SKKU-Dormie</h1>
+    <p class="text-base font-bold text-gray-800 mb-4">for find dormate</p>
 
     <!-- Login Form -->
     <div class="w-full max-w-md bg-white p-6">
@@ -10,14 +11,14 @@
       <form class="space-y-4">
         <!-- Email Input -->
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">
+          <!-- <label for="email" class="block text-sm font-medium text-gray-700">
             Email Address
-          </label>
+          </label> -->
           <div class="mt-1 relative">
             <input
               id="email"
               type="email"
-              placeholder="Email"
+              placeholder="Email Address"
               class="w-full border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -25,17 +26,17 @@
 
         <!-- Verification Code -->
         <div>
-          <label
+          <!-- <label
             for="verification"
             class="block text-sm font-medium text-gray-700"
           >
             Verification Code
-          </label>
+          </label> -->
           <div class="mt-1 flex">
             <input
               id="verification"
               type="text"
-              placeholder="Enter code"
+              placeholder="Verification Code"
               class="flex-1 border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
@@ -48,11 +49,19 @@
         </div>
 
         <!-- Login Button -->
-        <button
+        <!-- <button
           type="submit"
           class="w-full bg-blue-500 text-white py-2 text-sm font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           Login
+        </button> -->
+
+        <!-- Demo용 -->
+        <button
+          type="submit"
+          class="w-full bg-blue-500 text-white py-2 text-sm font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <NuxtLink to="/chat"> Login </NuxtLink>
         </button>
       </form>
 
@@ -64,6 +73,10 @@
         >
           I Don't Have Account
         </NuxtLink>
+      </div>
+
+      <div class="flex justify-center mt-6">
+        <img src="/skku_logo.jpg" alt="SKKU Logo" class="h-32" />
       </div>
     </div>
   </div>
