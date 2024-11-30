@@ -44,6 +44,8 @@
               <input
                 type="radio"
                 name="gender"
+                value="true"
+                v-model="gender"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -65,6 +67,8 @@
               <input
                 type="radio"
                 name="gender"
+                value="false"
+                v-model="gender"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -152,7 +156,15 @@
   </div>
 </template>
 
-<script></script>
+<script setup>
+import { ref, watch } from 'vue';
+const gender = ref(true);
+
+watchEffect(() => {
+  console.log(`Current Gender: ${gender.value}`);
+  // 실시간으로 Vuex에 저장
+});
+</script>
 
 <style>
 /* Optional custom styles */

@@ -43,7 +43,9 @@
               <span>20% ↓</span>
               <input
                 type="radio"
-                name="gender"
+                name="proportion"
+                value="1"
+                v-model="proportion"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -64,7 +66,9 @@
               <span>20% ↑</span>
               <input
                 type="radio"
-                name="gender"
+                name="proportion"
+                value="2"
+                v-model="proportion"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -85,7 +89,9 @@
               <span>40% ↑</span>
               <input
                 type="radio"
-                name="gender"
+                name="proportion"
+                value="3"
+                v-model="proportion"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -105,7 +111,9 @@
               <span>60% ↑</span>
               <input
                 type="radio"
-                name="gender"
+                name="proportion"
+                value="4"
+                v-model="proportion"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -124,7 +132,9 @@
               <span>80% ↑</span>
               <input
                 type="radio"
-                name="gender"
+                name="proportion"
+                value="5"
+                v-model="proportion"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -170,7 +180,15 @@
   </div>
 </template>
 
-<script></script>
+<script setup>
+import { ref, watch } from 'vue';
+const proportion = ref(0);
+
+watchEffect(() => {
+  console.log(`Current proportion: ${proportion.value}`);
+  // 실시간으로 Vuex에 저장
+});
+</script>
 
 <style>
 /* Optional custom styles */

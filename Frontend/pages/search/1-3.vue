@@ -43,7 +43,9 @@
               <span>Yes</span>
               <input
                 type="radio"
-                name="gender"
+                name="smoke"
+                value="true"
+                v-model="smoke"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -64,7 +66,9 @@
               <span>No</span>
               <input
                 type="radio"
-                name="gender"
+                name="smoke"
+                value="false"
+                v-model="smoke"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -152,7 +156,15 @@
   </div>
 </template>
 
-<script></script>
+<script setup>
+import { ref, watch } from 'vue';
+const smoke = ref(false);
+
+watchEffect(() => {
+  console.log(`Current smoke: ${smoke.value}`);
+  // 실시간으로 Vuex에 저장
+});
+</script>
 
 <style>
 /* Optional custom styles */
