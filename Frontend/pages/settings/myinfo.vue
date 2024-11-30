@@ -6,7 +6,7 @@
     </div>
 
     <!-- Settings List -->
-    <div class="flex-1 bg-white mt-4">
+    <div class="flex-1 bg-white">
       <ul class="divide-y divide-gray-200">
         <li
           v-for="item in settings"
