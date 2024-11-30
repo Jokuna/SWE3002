@@ -22,7 +22,7 @@ userdb_compressed.json은 가독성을 위해 각 유저의 vector를 3개만 �
 # Filtering
 userdb_processed.json에서 자신과 맞는 조건의 유저들을 필터링합니다.
 
-"자신"에 해당하는 target user의 id값(int)을 변수로 지정해야 합니다.(기본적으로 target_userId = 255로 코드 내에 작성되어 있습니다.)
+"자신"에 해당하는 target user의 id값(int)을 변수로 지정해야 합니다.(기본적으로 target_userId = 255로 코드 내에 예시로써 작성되어 있습니다.)
 
 성별, 기숙사, 흡연 여부는 반드시 일치해야 합니다.
 
