@@ -10,6 +10,8 @@
 # Embedding 
 userdb에서 성격 유사도를 계산하기 위해 openai의 embedding api를 이용하여 trait을 embedding 합니다.
 
+userdb.json의 data를 직접 다 embedding 해보시려면 약 10분정도 걸리기 때문에 result_example.zip에 미리 돌려둔 결과가 포함되어 있습니다.
+
 api는 제가 결제해서 팀플용으로 만든 계정의 api key를 사용했습니다. ~아마 프로젝트를 5번 해도 credit은 다 못쓸겁니다.~
 
 결과 파일에는 embedding 변수가 추가되며, 해당 값은 1536개의 float으로 이루어져 있습니다.
