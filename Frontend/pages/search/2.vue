@@ -75,6 +75,7 @@
           Reset
         </button>
         <button
+          @click="set_filter"
           class="bg-blue-500 text-white py-2 rounded-md text-sm font-medium hover:bg-blue-600 w-2/5"
         >
           Apply
@@ -129,6 +130,40 @@ watchEffect(() => {
 
   console.log(store.getters.getFilterData);
 });
+
+// -- filter 업로드 부분
+async function decodeJwt(token) {
+  const result = await $fetch(`/backend/chat/jwt?token=${token}`, {
+    headers: {
+      accept: 'application/json'
+    },
+    method: 'GET'
+  });
+  const { sub } = result;
+  return sub;
+}
+
+async function getUser_id() {
+  if (store.getters.getToken == '') {
+    return;
+  }
+  const data = await decodeJwt(store.getters.getToken);
+  // console.log(data);
+  return data;
+}
+
+async function set_filter() {
+  // console.log(store.getters.getFilterData)
+
+  const user_id = await getUser_id();
+
+  const user_info = {
+    ...store.getters.getFilterData,
+    user_id
+  };
+
+  await navigateTo(`/search/result/${user_id}`); // user_id
+}
 </script>
 
 <style>

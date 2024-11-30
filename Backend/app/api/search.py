@@ -4,6 +4,9 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from pydantic import BaseModel, field_validator, EmailStr
 from app.db import get_db
 from typing import List
+from bson import ObjectId
+from bson.json_util import dumps
+import json
 
 '''
 검색 관련 API
@@ -37,12 +40,15 @@ class RegisterUser(BaseModel):
 
 # 검색 조회 - 해당 필터값을 기반으로 조회
 @router.post("/filter")
-async def post_users_by_filter(_user: RegisterUser, db: AsyncIOMotorDatabase=Depends(get_db)):
-
-    print(_user)
+async def post_users_by_filter(user_id: str, db: AsyncIOMotorDatabase=Depends(get_db)): # _user: RegisterUser, db: AsyncIOMotorDatabase=Depends(get_db)
+    print(user_id)
     # 세션에 해당 데이터가 저장될 예정
+    # 지금은 Demo용이라 간단하게 구현
+    query = {"_id": {"$ne": ObjectId(user_id)}}
 
-    return _user.user_id
+    messages_cursor = db["User"].find(query).limit(10)
+    messages = await messages_cursor.to_list(length=None)
+    messages_json = dumps(messages)
 
-
-
+    dictionary = json.loads(messages_json)
+    return dictionary
