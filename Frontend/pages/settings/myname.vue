@@ -60,12 +60,12 @@
       <button
         class="w-full bg-blue-500 text-white py-3 rounded-lg text-sm font-medium hover:bg-blue-600"
       >
-        My Information
+        Update
       </button>
       <button
         class="w-full bg-gray-200 text-gray-800 py-3 rounded-lg text-sm font-medium hover:bg-gray-300"
       >
-        Account Setting
+        <NuxtLink to="/settings/myinfo"> Account Setting </NuxtLink>
       </button>
     </div>
 

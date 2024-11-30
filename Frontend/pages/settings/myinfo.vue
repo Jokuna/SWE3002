@@ -2,7 +2,7 @@
   <div class="flex flex-col min-h-screen bg-gray-100">
     <!-- Header -->
     <div class="text-center border-b py-4 bg-white">
-      <h1 class="text-xl font-bold text-gray-800">Account Setting</h1>
+      <h1 class="text-xl font-bold text-gray-800">Settings</h1>
     </div>
 
     <!-- Settings List -->
