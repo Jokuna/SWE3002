@@ -2,7 +2,7 @@
   <div class="flex flex-col min-h-screen bg-white">
     <!-- Header -->
     <div class="text-center border-b py-4 bg-white" style="max-height: 60px">
-      <h1 class="text-xl font-bold text-gray-800">Sleeping Bear</h1>
+      <h1 class="text-xl font-bold text-gray-800">Chat</h1>
     </div>
 
     <!-- Chat Section -->
