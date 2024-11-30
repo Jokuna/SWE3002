@@ -44,10 +44,11 @@ IoU@0.5 라고 하면 IoU > 0.5 이상인 것만 포함한다는 의미입니다
 1. 23\~7, 0\~9 와 같이 24시 표기법에서 겹치는 시간대를 계산하기 위해서 circular list를 사용했습니다. 이를 위해 각 시간을 30분을 기준으로 반올림하여 int로 저장했습니다.
 2. list는 24개의 node를 가지고 있으며, target user의 수면 시간에 해당하는 node들은 1의 값을, 나머지 시간에 해당하는 node는 0을 가지고 있습니다.
 3. target user의 수면 시간대에 해당하는 node들과 나머지 user의 수면 시간대를 비교하여 일치하는 node의 개수가 교집합이 됩니다.
+
 <- 혹시 다른 좋은 아이디어가 있다면 알려주세요!
 
 ---
-# matching
+# Matching
 userdb_filtered.json에서 앞서 필터링의 기준이 되는 target user(json의 가장 상위 user)를 기준으로 다른 유저들과의 유사도를 계산합니다.
 
 Cross check를 위해 target_user_id값을 입력해서 해당 유저가 json의 가장 위에 있는지 확인하는 과정이 있습니다. 일치하지 않다면 error가 발생합니다.
