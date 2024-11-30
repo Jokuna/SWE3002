@@ -41,11 +41,12 @@
               class="flex items-center space-x-2 justify-between w-full h-full p-4"
             >
               <input
-                id="wakeUp"
+                id="age"
                 type="number"
                 min="0"
                 max="23"
                 placeholder="20"
+                v-model="age"
                 class="w-full border border-gray-300 rounded-md px-4 py-2 text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </label>
@@ -100,7 +101,26 @@
   </div>
 </template>
 
-<script></script>
+<script setup>
+import { ref, watch } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
+const age = ref(20);
+
+watchEffect(() => {
+  console.log(`Current age at: ${age.value}`);
+
+  let filterData = store.getters.getFilterData;
+
+  filterData.age = Number(age.value);
+  store.dispatch('updateFilterData', filterData);
+  // $store.commit('setToken', timestamp.toString());
+
+  console.log(store.getters.getFilterData);
+});
+</script>
 
 <style>
 /* Optional custom styles */

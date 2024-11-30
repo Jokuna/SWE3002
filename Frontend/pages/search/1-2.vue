@@ -43,7 +43,9 @@
               <span>In-kwan</span>
               <input
                 type="radio"
-                name="gender"
+                name="dorm"
+                value="1"
+                v-model="dorm"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -64,7 +66,9 @@
               <span>Ui-kwan</span>
               <input
                 type="radio"
-                name="gender"
+                name="dorm"
+                value="2"
+                v-model="dorm"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -85,7 +89,9 @@
               <span>Ye-kwan</span>
               <input
                 type="radio"
-                name="gender"
+                name="dorm"
+                value="3"
+                v-model="dorm"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -105,7 +111,9 @@
               <span>Ji-kwan</span>
               <input
                 type="radio"
-                name="gender"
+                name="dorm"
+                value="4"
+                v-model="dorm"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -124,7 +132,9 @@
               <span>Sin-kwan</span>
               <input
                 type="radio"
-                name="gender"
+                name="dorm"
+                value="5"
+                v-model="dorm"
                 class="form-radio text-blue-600"
               />
             </label>
@@ -170,7 +180,23 @@
   </div>
 </template>
 
-<script></script>
+<script setup>
+import { ref, watch } from 'vue';
+import { useNuxtApp } from '#app';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const dorm = ref(0);
+
+watchEffect(() => {
+  console.log(`Current dorm: ${dorm.value}`);
+
+  let filterData = store.getters.getFilterData;
+
+  filterData.dormitory = Number(dorm.value);
+  store.dispatch('updateFilterData', filterData);
+});
+</script>
 
 <style>
 /* Optional custom styles */

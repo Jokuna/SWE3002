@@ -41,11 +41,10 @@
               class="flex items-center space-x-2 justify-between w-full h-full p-4"
             >
               <input
-                id="wakeUp"
-                type="number"
-                min="0"
-                max="23"
+                id="major"
+                type="string"
                 placeholder="write your major"
+                v-model="major"
                 class="w-full border border-gray-300 rounded-md px-4 py-2 text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </label>
@@ -67,7 +66,10 @@
             >
               Reset
             </button>
-            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg w-2/5">
+            <button
+              class="px-4 py-2 bg-blue-600 text-white rounded-lg w-2/5"
+              @click="set_filter"
+            >
               Apply
             </button>
           </div>
@@ -100,7 +102,68 @@
   </div>
 </template>
 
-<script></script>
+<script setup>
+import { ref, watch } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
+const major = ref('');
+
+watchEffect(() => {
+  console.log(`Current major at: ${major.value}`);
+
+  let filterData = store.getters.getFilterData;
+
+  filterData.major = major.value;
+  store.dispatch('updateFilterData', filterData);
+
+  console.log(store.getters.getFilterData);
+});
+
+// -- filter 업로드 부분
+async function decodeJwt(token) {
+  const result = await $fetch(`/backend/chat/jwt?token=${token}`, {
+    headers: {
+      accept: 'application/json'
+    },
+    method: 'GET'
+  });
+  const { sub } = result;
+  return sub;
+}
+
+async function getUser_id() {
+  if (store.getters.getToken == '') {
+    return;
+  }
+  const data = await decodeJwt(store.getters.getToken);
+  // console.log(data);
+  return data;
+}
+
+async function set_filter() {
+  // console.log(store.getters.getFilterData)
+
+  const user_info = {
+    ...store.getters.getFilterData,
+    user_id: await getUser_id()
+  };
+
+  console.log(user_info);
+
+  const user_id = await $fetch('/backend/search/filter', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: user_info
+  });
+  // user_id = fetch
+  await navigateTo(`/search/result/${user_id}`); // user_id
+}
+</script>
 
 <style>
 /* Optional custom styles */
