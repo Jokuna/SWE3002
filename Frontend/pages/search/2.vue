@@ -109,6 +109,10 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
 const sleep = ref(23);
 const wake = ref(8);
 
