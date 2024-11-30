@@ -125,7 +125,7 @@ async def init_example(): # 더미 데이터 삽입
             semester=info["semester"],
             major=info["major"],
             selfIntroduction=info["selfIntroduction"],
-            userId=new_user.id  # MongoDB의 User ID
+            userId=str(new_user.id)  # MongoDB의 User ID
         )
         await user_info.insert()
 
@@ -151,7 +151,7 @@ async def init_example(): # 더미 데이터 삽입
         semester=3, 
         major="Computer Science", 
         selfIntroduction="Hi, I love programming!",
-        userId=ObjectId(new_user.id)
+        userId=str(new_user.id)
     )
     await user_info.insert()
 
@@ -176,7 +176,7 @@ async def init_example(): # 더미 데이터 삽입
         semester=3, 
         major="Computer Science", 
         selfIntroduction="Hi, I Hate programming!",
-        userId=ObjectId(new_user2.id)
+        userId=str(new_user2.id)
     )
     await user_info2.insert()
 

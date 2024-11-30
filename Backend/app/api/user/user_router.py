@@ -121,6 +121,24 @@ async def genToken(_user: GenTokenUser, db: AsyncIOMotorDatabase=Depends(get_db)
 '''
 프로필 API
 '''
+
+def transform_object_id(data: dict):
+    if data and "_id" in data:
+        data["_id"] = str(data["_id"])
+    return data
+
+@router.get("/profile/info/{user_id}")
+async def get_user_info_detail(user_id: str, db: AsyncIOMotorDatabase=Depends(get_db)):
+    collection = db["User"]
+    user = await collection.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid user id")
+
+    data = await db["UserInfo"].find_one({"userId": user_id})
+    
+    return transform_object_id(data)
+
+
 # 프로필 조회
 @router.get("/profile/{user_id}")
 async def get_user_info(user_id: str, db: AsyncIOMotorDatabase=Depends(get_db)):
@@ -133,6 +151,7 @@ async def get_user_info(user_id: str, db: AsyncIOMotorDatabase=Depends(get_db)):
     del user["passkey"] # passkey는 frontend로 전달하지 않는다.
     
     return user
+
 
 # 프로필 변경
 @router.post("/profile")
