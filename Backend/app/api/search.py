@@ -1,4 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import JSONResponse
+from motor.motor_asyncio import AsyncIOMotorDatabase
+from pydantic import BaseModel, field_validator, EmailStr
+from app.db import get_db
 from typing import List
 
 '''
@@ -12,27 +16,33 @@ router = APIRouter(
     tags=["search"]
 )
 
-@router.get("/")
-async def hello():
-    return "Hello World"
+class RegisterUser(BaseModel):
+    user_id:            str
+    isMale:             bool
+    dormitory:          int
+    latestGPA:          float
+    isSmoke:            bool
+    sleepingTime:       str
+    wakeTime:           str
+    age:                int
+    semester:           int
+    major:              str
+    selfIntroduction:   str
+    trait:              list[str]
+    weekendProportion:  int
+    isOpenAge:          bool
+    isOpenMajor:        bool
 
-
-# 검색 옵션 설정 - Basic
-@router.post("/filter/basic")
-async def set_filter_basic():
-    return "filter 설정"
-
-
-# 검색 옵션 설정 - Sleep Time
-@router.post("/filter/sleep")
-async def set_filter_sleep():
-    return "filter 설정"
-
+    
 
 # 검색 조회 - 해당 필터값을 기반으로 조회
-@router.get("/filter")
-async def get_users_by_filter():
-    return ""
+@router.post("/filter")
+async def post_users_by_filter(_user: RegisterUser, db: AsyncIOMotorDatabase=Depends(get_db)):
+
+    print(_user)
+    # 세션에 해당 데이터가 저장될 예정
+
+    return _user.user_id
 
 
 

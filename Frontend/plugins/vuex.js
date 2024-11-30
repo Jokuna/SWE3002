@@ -4,28 +4,53 @@ export default defineNuxtPlugin((nuxtApp) => {
   const store = createStore({
     state: () => ({
       token: '', // 기본 상태
-      filterData: {}, // 새로운 JSON 데이터 상태
+      filterData: {
+        isMale: true,
+        dormitory: 0,
+        latestGPA: 0,
+        isSmoke: true,
+        sleepingTime: '',
+        wakeTime: '',
+        age: 0,
+        semester: 0,
+        major: 'string',
+        selfIntroduction: '',
+        trait: [''],
+        weekendProportion: 0,
+        isOpenAge: false,
+        isOpenMajor: false,
+      },
     }),
     mutations: {
       setToken(state, newToken) {
         state.token = newToken;
 
-        // `localStorage`에 상태 저장
-        localStorage.setItem('token', newToken);
+        if (process.client) {
+          // `localStorage`에 상태 저장
+          localStorage.setItem('token', newToken);
+        }
       },
       clearToken(state) {
         state.token = '';
 
-        // `localStorage`에서 상태 제거
-        localStorage.removeItem('token');
+        if (process.client) {
+          // `localStorage`에서 상태 제거
+          localStorage.removeItem('token');
+        }
       },
       setFilterData(state, data) {
-        state.jsonData = data;
-        localStorage.setItem('filterData', JSON.stringify(data));
+        state.filterData = data;
+
+        if (process.client) {
+          localStorage.setItem('filterData', JSON.stringify(data));
+        }
       },
       clearFilterData(state) {
-        state.jsonData = {};
-        localStorage.removeItem('filterData');
+        state.filterData = {};
+
+        if (process.client) {
+          localStorage.removeItem('filterData');
+        }
       },
     },
     actions: {
@@ -57,7 +82,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     if (savedFilterData) {
       try {
-        store.commit('filterData', JSON.parse(savedFilterData));
+        store.commit('setFilterData', JSON.parse(savedFilterData));
       } catch (error) {
         console.error('Error parsing JSON data from localStorage:', error);
       }
