@@ -121,8 +121,8 @@ watchEffect(() => {
 
   let filterData = store.getters.getFilterData;
 
-  filterData.sleepingTime = sleep.value;
-  filterData.wakeTime = wake.value;
+  filterData.sleepingTime = Number.toString(sleep.value);
+  filterData.wakeTime = Number.toString(wake.value);
 
   store.dispatch('updateFilterData', filterData);
   // $store.commit('setToken', timestamp.toString());
