@@ -1,6 +1,7 @@
 # 기본적인 사항
-0. 유사도를 계산하기 위해서 db에 필연적으로 embedding을 넣어야할 것 같습니다. 아니면 매번 유사도를 계산할 때마다 api를 호출하는 방법도 있긴 합니다.
-0. Openai에서 성격을 종합해서 embedding하다보니 전공까지 성격과 통합해서 embedding 할 수도 있을 것 같습니다.
+* 유사도를 계산하기 위해서 db에 필연적으로 embedding을 넣어야할 것 같습니다. 아니면 매번 유사도를 계산할 때마다 api를 호출하는 방법도 있긴 합니다.
+* Openai에서 성격을 종합해서 embedding하다보니 전공까지 성격과 통합해서 embedding 할 수도 있을 것 같습니다.
+  
 1. userdb.json에는 500명의 임시 데이터가 들어있습니다. 성격은 trait 변수에 들어있습니다.
 2. 실행 순서는 embedding - filtering - matching 입니다
 3. userdb 폴더에는 userdb.json 파일만 들어있고, 실행 결과는 result_example 폴더에 들어있습니다. 직접 실행해보셔도 되고 example만 확인하셔도 됩니다.
