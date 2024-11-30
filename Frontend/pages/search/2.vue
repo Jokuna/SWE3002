@@ -10,7 +10,7 @@
       <button
         class="flex-1 py-2 text-gray-500 border-b-2 border-transparent hover:text-blue-500"
       >
-        <NuxtLink to="/search/1-1"> Basic Info </NuxtLink>
+        <NuxtLink to="/search/1"> Basic Info </NuxtLink>
       </button>
       <button
         class="flex-1 py-2 text-blue-500 border-b-2 border-blue-500 font-medium"
