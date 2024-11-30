@@ -54,6 +54,4 @@ Embedding vector로 cosine similarity를 계산하여 유사도를 측정합니�
 sorted_similarities_for_target_user.json 파일은 target_user의 Id값과, 다른 유저들과의 유사도가 내림차순으로 정렬되어 저장되어 있습니다.
 
 ---
-Openai에서 성격을 종합해서 embedding하다보니 "외향적인" 같은 단어는 중요도롤 낮게 측정하는 경향이 있는 것 같긴 합니다.
-
-대신 전공까지 성격과 통합해서 embedding 할 수도 있을 것 같습니다.
+Openai에서 성격을 종합해서 embedding하다보니 전공까지 성격과 통합해서 embedding 할 수도 있을 것 같습니다.
