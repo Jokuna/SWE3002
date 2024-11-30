@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col h-screen bg-gray-100">
     <!-- Header -->
-    <!-- <div class="text-center border-b py-4 bg-white">
+    <div class="text-center border-b py-4 bg-white">
       <h1 class="text-xl font-bold text-gray-800">Message Box</h1>
-    </div> -->
+    </div>
 
     <!-- Message List -->
     <div class="flex-1 bg-white overflow-y-auto">
@@ -16,14 +16,14 @@
           <div class="flex items-center space-x-4">
             <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
             <div>
-              <p class="text-gray-800 font-medium">{{ item.name }}</p>
+              <p class="text-gray-800 font-medium">{{ item.username }}</p>
               <p class="text-sm text-gray-500">
                 Matching Rate: {{ item.matchRate }}%
               </p>
             </div>
           </div>
           <div class="flex items-center space-x-2">
-            <NuxtLink to="/chat/1">
+            <NuxtLink :to="`/chat/${item.chatRoomId}`">
               <span
                 v-if="item.unread"
                 class="w-2 h-2 bg-red-500 rounded-full"
@@ -74,26 +74,92 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      messages: [
-        { name: 'Sleeping Bear', matchRate: 95, unread: true },
-        { name: 'Crying Turtle', matchRate: 93, unread: false },
-        { name: 'Running Rabbit', matchRate: 88, unread: false },
-        { name: 'Rising Star', matchRate: 88, unread: false },
-        { name: 'Tired Hunter', matchRate: 77, unread: false },
-        { name: 'Angry Bird', matchRate: 63, unread: false }
-      ]
-    };
-  },
-  head() {
-    return {
-      title: 'Message Box - SKKU-Dormie'
-    };
+<script setup>
+import { ref } from 'vue';
+import { useNuxtApp } from '#app';
+
+const { $store } = useNuxtApp();
+
+// const messages = ref([
+//   { username: 'Sleeping Bear', matchRate: 95, unread: true },
+//   { username: 'Crying Turtle', matchRate: 93, unread: false },
+//   { username: 'Running Rabbit', matchRate: 88, unread: false },
+//   { username: 'Rising Star', matchRate: 88, unread: false },
+//   { username: 'Tired Hunter', matchRate: 77, unread: false },
+//   { username: 'Angry Bird', matchRate: 63, unread: false }
+// ]);
+
+const messages = ref([]);
+const user_id = ref('');
+
+async function decodeJwt(token) {
+  const result = await $fetch(`/backend/chat/jwt?token=${token}`, {
+    headers: {
+      accept: 'application/json'
+    },
+    method: 'GET'
+  });
+  const { sub } = result;
+  return sub;
+}
+
+async function getUser_id() {
+  if ($store.state.token == '') {
+    return;
   }
+  const data = await decodeJwt($store.state.token);
+  user_id.value = data;
+  return data;
+}
+
+getUser_id();
+
+const getChatRoomList = async (chatroom_id) => {
+  const data = await $fetch(`/backend/chat/list`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      token: $store.state.token,
+      username: 'dummy'
+    })
+  });
+
+  console.log(data);
+
+  for (const iterator of data) {
+    console.log(iterator);
+
+    console.log(iterator.userId1);
+    console.log(iterator.userId2);
+    console.log(user_id.value);
+
+    let target_user_id = iterator.userId1;
+    if (iterator.userId1 == user_id.value) {
+      target_user_id = iterator.userId2;
+    }
+
+    const user = await $fetch(`/backend/user/profile/${target_user_id}`, {
+      headers: {
+        accept: 'application/json'
+      },
+      method: 'GET'
+    });
+
+    console.log(iterator);
+    console.log(user);
+
+    messages.value.push({
+      ...iterator,
+      ...user
+    });
+  }
+  console.log(messages.value);
 };
+
+getChatRoomList();
 </script>
 
 <style>

@@ -2,7 +2,7 @@
   <div class="flex flex-col min-h-screen bg-gray-100">
     <!-- Header -->
     <div class="text-center border-b py-4 bg-white">
-      <h1 class="text-xl font-bold text-gray-800">Account Setting</h1>
+      <h1 class="text-xl font-bold text-gray-800">Settings</h1>
     </div>
 
     <!-- Settings List -->
@@ -17,20 +17,22 @@
             <span class="text-xl text-gray-600">{{ item.icon }}</span>
             <p class="text-gray-800 font-medium">{{ item.label }}</p>
           </div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+          <NuxtLink :to="`/settings/${item.path}`">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </NuxtLink>
         </li>
       </ul>
     </div>
@@ -65,15 +67,16 @@ export default {
   data() {
     return {
       settings: [
-        { label: 'Gender', icon: '♂️♀️' },
-        { label: 'Dormitory', icon: '🌬️' },
-        { label: 'Smoking Status', icon: '✏️' },
-        { label: 'Proportion', icon: '%' },
-        { label: 'Sleep time', icon: '⏰' },
-        { label: 'Age', icon: '⌛' },
-        { label: 'Major', icon: '📊' },
-        { label: 'Introduce my self', icon: '💬' },
-        { label: 'Lastest GPA', icon: '📈' }
+        { label: 'Name', icon: '⚙️', path: 'myname' },
+        { label: 'Gender', icon: '♂️♀️', path: 'myname' },
+        { label: 'Dormitory', icon: '🌬️', path: 'myname' },
+        { label: 'Smoking Status', icon: '✏️', path: 'myname' },
+        { label: 'Proportion', icon: '%', path: 'myname' },
+        { label: 'Sleep time', icon: '⏰', path: 'myname' },
+        { label: 'Age', icon: '⌛', path: 'myname' },
+        { label: 'Major', icon: '📊', path: 'myname' },
+        { label: 'Introduce my self', icon: '💬', path: 'myname' },
+        { label: 'Lastest GPA', icon: '📈', path: 'myname' }
       ]
     };
   },

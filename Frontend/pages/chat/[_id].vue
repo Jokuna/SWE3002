@@ -16,7 +16,7 @@
       <!-- V-for -->
       <div v-for="(message, index) in dataSource" :key="index">
         <div
-          v-if="user_id == message.writerId.$id.$oid"
+          v-if="user_id != message.writerId.$id.$oid"
           class="flex items-start space-x-2 mb-4"
         >
           <!-- 아바타 -->
@@ -49,21 +49,32 @@
     <div class="flex items-center px-4 py-2 border-t bg-white">
       <input
         type="text"
+        v-model="txt"
         placeholder="Say something..."
         class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none"
       />
-      <button class="ml-2">
+
+      <button
+        class="ml-2"
+        style="
+          background-color: #007bff;
+          border: none;
+          padding: 10px;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        "
+        @click="sendChatMessage"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 text-gray-500"
-          viewBox="0 0 20 20"
-          fill="currentColor"
+          viewBox="0 0 24 24"
+          fill="white"
+          style="width: 20px; height: 20px"
         >
-          <path
-            fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11.707V10h1.293a1 1 0 010 2H10a1 1 0 01-1-1V6.293a1 1 0 112 0z"
-            clip-rule="evenodd"
-          />
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
         </svg>
       </button>
     </div>
@@ -107,6 +118,7 @@ console.log(chatroom_id.value);
 
 const dataSource = ref([]);
 const user_id = ref('');
+const txt = ref('');
 
 async function decodeJwt(token) {
   const result = await $fetch(`/backend/chat/jwt?token=${token}`, {
@@ -119,11 +131,11 @@ async function decodeJwt(token) {
   return sub;
 }
 
-function getUser_id() {
+async function getUser_id() {
   if ($store.state.token == '') {
     return;
   }
-  const data = decodeJwt($store.state.token);
+  const data = await decodeJwt($store.state.token);
   user_id.value = data;
   return data;
 }
@@ -137,6 +149,27 @@ const getHistory = async (chatroom_id) => {
   });
 
   dataSource.value = data;
+};
+
+const sendChatMessage = async () => {
+  const data = await $fetch(
+    `/backend/chat/message/${route.params._id}?msg=${txt.value}`,
+    {
+      headers: {
+        accept: 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        token: $store.state.token,
+        username: 'dummy'
+      })
+    }
+  );
+
+  console.log(data);
+
+  // 채팅창 reload
+  getHistory(route.params._id);
 };
 
 getUser_id();
