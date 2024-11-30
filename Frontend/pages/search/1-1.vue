@@ -158,10 +158,23 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { useNuxtApp } from '#app';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
 const gender = ref(true);
 
 watchEffect(() => {
   console.log(`Current Gender: ${gender.value}`);
+
+  let filterData = store.getters.getFilterData;
+
+  filterData.isMale = gender.value == 'true'; // string이라..
+  store.dispatch('updateFilterData', filterData);
+  // $store.commit('setToken', timestamp.toString());
+
+  console.log(store.getters.getFilterData);
   // 실시간으로 Vuex에 저장
 });
 </script>

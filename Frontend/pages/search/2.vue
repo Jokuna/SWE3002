@@ -44,6 +44,7 @@
             min="0"
             max="23"
             placeholder="23"
+            v-model="sleep"
             class="w-full border border-gray-300 rounded-md px-4 py-2 text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -60,6 +61,7 @@
             min="0"
             max="23"
             placeholder="08"
+            v-model="wake"
             class="w-full border border-gray-300 rounded-md px-4 py-2 text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -105,7 +107,25 @@
   </div>
 </template>
 
-<script></script>
+<script setup>
+import { ref, watch } from 'vue';
+const sleep = ref(23);
+const wake = ref(8);
+
+watchEffect(() => {
+  console.log(`Current sleep at: ${sleep.value}, wake at: ${wake.value}`);
+
+  let filterData = store.getters.getFilterData;
+
+  filterData.sleepingTime = sleep.value;
+  filterData.wakeTime = wake.value;
+
+  store.dispatch('updateFilterData', filterData);
+  // $store.commit('setToken', timestamp.toString());
+
+  console.log(store.getters.getFilterData);
+});
+</script>
 
 <style>
 /* Optional custom styles */

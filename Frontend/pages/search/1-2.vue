@@ -182,11 +182,19 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { useNuxtApp } from '#app';
+import { useStore } from 'vuex';
+
+const store = useStore();
 const dorm = ref(0);
 
 watchEffect(() => {
   console.log(`Current dorm: ${dorm.value}`);
-  // 실시간으로 Vuex에 저장
+
+  let filterData = store.getters.getFilterData;
+
+  filterData.dormitory = Number(dorm.value);
+  store.dispatch('updateFilterData', filterData);
 });
 </script>
 

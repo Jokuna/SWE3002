@@ -182,11 +182,23 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
 const proportion = ref(0);
 
 watchEffect(() => {
   console.log(`Current proportion: ${proportion.value}`);
   // 실시간으로 Vuex에 저장
+
+  let filterData = store.getters.getFilterData;
+
+  filterData.weekendProportion = Number(proportion.value);
+  store.dispatch('updateFilterData', filterData);
+  // $store.commit('setToken', timestamp.toString());
+
+  console.log(store.getters.getFilterData);
 });
 </script>
 

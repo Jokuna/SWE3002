@@ -158,11 +158,20 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
 const smoke = ref(false);
 
 watchEffect(() => {
   console.log(`Current smoke: ${smoke.value}`);
   // 실시간으로 Vuex에 저장
+
+  let filterData = store.getters.getFilterData;
+
+  filterData.isSmoke = smoke.value == 'true'; // string이라..
+  store.dispatch('updateFilterData', filterData);
 });
 </script>
 
