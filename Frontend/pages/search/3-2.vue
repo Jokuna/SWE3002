@@ -145,22 +145,13 @@ async function getUser_id() {
 async function set_filter() {
   // console.log(store.getters.getFilterData)
 
+  const user_id = await getUser_id();
+
   const user_info = {
     ...store.getters.getFilterData,
-    user_id: await getUser_id()
+    user_id
   };
 
-  console.log(user_info);
-
-  const user_id = await $fetch('/backend/search/filter', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: user_info
-  });
-  // user_id = fetch
   await navigateTo(`/search/result/${user_id}`); // user_id
 }
 </script>

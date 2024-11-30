@@ -18,7 +18,7 @@ class UserInfo(Document):
     trait: Optional[List[str]] = None  # 특성 배열
     weekendProportion: Optional[int] = None
 
-    userId: Optional[Link[User]]
+    userId: str # Optional[Link[User]]
 
     class Settings:
         collection = "UserInfo"

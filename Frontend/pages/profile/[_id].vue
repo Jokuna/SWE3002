@@ -24,25 +24,54 @@
       <!-- Details Section -->
       <div class="space-y-3">
         <div class="bg-gray-50 py-2 px-4 rounded">
-          <p class="text-gray-800">Gender is Male</p>
+          <p class="text-gray-800">
+            Gender is {{ dataProfile_info.isMale ? 'Male' : 'Female' }}
+          </p>
         </div>
         <div class="bg-gray-50 py-2 px-4 rounded">
-          <p class="text-gray-800">I would like to live in Ji-kwan</p>
+          <p class="text-gray-800">
+            I would like to live in
+            {{
+              dataProfile_info.dormitary == 1
+                ? 'In-kwan'
+                : dataProfile_info.dormitary == 2
+                  ? 'Ui-kwan'
+                  : dataProfile_info.dormitary == 3
+                    ? 'Ye-kwan'
+                    : dataProfile_info.dormitary == 4
+                      ? 'Ji-kwan'
+                      : 'Sin-kwan'
+            }}
+          </p>
         </div>
         <div class="bg-gray-50 py-2 px-4 rounded">
-          <p class="text-gray-800">I am Smoker</p>
+          <p class="text-gray-800">
+            I am {{ dataProfile_info.isSmoke ? 'Smoker' : 'not Smoker' }}
+          </p>
         </div>
         <div class="bg-gray-50 py-2 px-4 rounded">
           <p class="text-gray-800">Not in Dormitory in weekend</p>
+          <!-- {{ dataProfile_info.weekendProportion }} -->
         </div>
         <div class="bg-gray-50 py-2 px-4 rounded">
-          <p class="text-gray-800">Bedtime is 23:00 ~ 07:00</p>
+          <p class="text-gray-800">
+            Bedtime is {{ dataProfile_info.sleepingTime }} ~
+            {{ dataProfile_info.wakeTime }}
+          </p>
         </div>
         <div class="bg-gray-50 py-2 px-4 rounded">
-          <p class="text-gray-800">Age is private</p>
+          <p class="text-gray-800">
+            Age is
+            {{ dataProfile_info.age == 0 ? 'private' : dataProfile_info.age }}
+          </p>
         </div>
         <div class="bg-gray-50 py-2 px-4 rounded">
-          <p class="text-gray-800">Major is private</p>
+          <p class="text-gray-800">
+            Major is
+            {{
+              dataProfile_info.major == '' ? 'private' : dataProfile_info.major
+            }}
+          </p>
         </div>
       </div>
     </div>
@@ -94,6 +123,7 @@ const { $store } = useNuxtApp();
 
 const route = useRoute();
 const dataProfile = ref([]);
+const dataProfile_info = ref([]);
 
 const getprofile = async () => {
   const data = await $fetch(`/backend/user/profile/${route.params._id}`, {
@@ -107,6 +137,18 @@ const getprofile = async () => {
   dataProfile.value = data;
 
   // 추가로, user info 가져오는 기능 구현
+  const datainfo = await $fetch(
+    `/backend/user/profile/info/${route.params._id}`,
+    {
+      headers: {
+        accept: 'application/json'
+      },
+      method: 'GET'
+    }
+  );
+
+  dataProfile_info.value = datainfo;
+  // userId
 };
 
 const createChatRoom = async () => {

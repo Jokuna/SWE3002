@@ -13,6 +13,16 @@ pip install ./requirements.txt
 - motor: 비동기 MongoDB 드라이버
 - pytest: 테스트 프레임워크
 
+## 2. 데이터베이스 실행
+
+FastAPI 웹 애플리케이션을 실행하기 전, 데이터베이스를 실행해야합니다.
+
+```bash
+docker compose up -d
+```
+
+웹브라우저에서 `http://localhost:8081` 주소로 접속 후, `admin:pass`로 MongoDB를 관리할 수 있습니다.
+
 ## 2. 웹서버 실행
 
 FastAPI 웹 애플리케이션을 실행하려면 아래 방법 중 하나를 선택하세요

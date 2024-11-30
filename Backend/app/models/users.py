@@ -9,6 +9,7 @@ class User(Document):
     passkey: Optional[str]
     passkeySentTime: datetime = datetime.utcnow()
     username: str
+    similarity: Optional[int]
 
     class Settings:
         collection = "Users"

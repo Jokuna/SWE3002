@@ -44,7 +44,7 @@
 
     <!-- Content Section -->
     <div class="flex-1 bg-white overflow-y-auto">
-      <div v-if="selectedTab === 'Basic Info'">
+      <div>
         <ul class="space-y-2">
           <li
             v-for="(item, index) in messages"
@@ -56,12 +56,12 @@
               <div>
                 <p class="text-gray-800 font-medium">{{ item.username }}</p>
                 <p class="text-sm text-gray-500">
-                  Matching Rate: {{ item.matchRate }}%
+                  Matching Rate: {{ item.similarity }}%
                 </p>
               </div>
             </div>
             <div class="flex items-center space-x-2">
-              <NuxtLink :to="`/profile/${item.user_id}`">
+              <NuxtLink :to="`/profile/${item._id.$oid}`">
                 <span
                   v-if="item.unread"
                   class="w-2 h-2 bg-red-500 rounded-full"
@@ -83,22 +83,6 @@
                 </svg>
               </NuxtLink>
             </div>
-          </li>
-        </ul>
-      </div>
-      <div v-else-if="selectedTab === 'Sleep Time'">
-        <ul class="space-y-2">
-          <li v-for="(item, index) in sleepTimes" :key="index">
-            <p class="text-gray-800 font-medium">{{ item.name }}</p>
-            <p class="text-sm text-gray-500">Bedtime: {{ item.bedtime }}</p>
-          </li>
-        </ul>
-      </div>
-      <div v-else-if="selectedTab === 'Extra'">
-        <ul class="space-y-2">
-          <li v-for="(item, index) in extras" :key="index">
-            <p class="text-gray-800 font-medium">{{ item.name }}</p>
-            <p class="text-sm text-gray-500">Habit: {{ item.habit }}</p>
           </li>
         </ul>
       </div>
@@ -129,43 +113,53 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      selectedTab: 'Basic Info',
-      messages: [
-        { username: 'Sleeping Bear', matchRate: 95 },
-        { username: 'Crying Turtle', matchRate: 93 },
-        { username: 'Running Rabbit', matchRate: 88 },
-        { username: 'Rising Star', matchRate: 88 },
-        { username: 'Tired Hunter', matchRate: 77 },
-        { username: 'Angry Bird', matchRate: 63 }
-      ],
-      sleepTimes: [
-        { username: 'Sleeping Bear', bedtime: '10:00 PM' },
-        { username: 'Crying Turtle', bedtime: '11:30 PM' },
-        { username: 'Running Rabbit', bedtime: '9:30 PM' },
-        { username: 'Rising Star', bedtime: '12:00 AM' },
-        { username: 'Tired Hunter', bedtime: '1:00 AM' },
-        { username: 'Angry Bird', bedtime: '2:00 AM' }
-      ],
-      extras: [
-        { username: 'Sleeping Bear', habit: 'Reads books before bed' },
-        { username: 'Crying Turtle', habit: 'Watches TV late' },
-        { username: 'Running Rabbit', habit: 'Goes jogging in the morning' },
-        { username: 'Rising Star', habit: 'Plays video games' },
-        { username: 'Tired Hunter', habit: 'Sleeps late after work' },
-        { username: 'Angry Bird', habit: 'Eats midnight snacks' }
-      ]
-    };
-  },
-  head() {
-    return {
-      title: 'Message Box - SKKU-Dormie'
-    };
+<script setup>
+import { ref, watch } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
+const messages = ref([]);
+
+async function decodeJwt(token) {
+  const result = await $fetch(`/backend/chat/jwt?token=${token}`, {
+    headers: {
+      accept: 'application/json'
+    },
+    method: 'GET'
+  });
+  const { sub } = result;
+  return sub;
+}
+
+async function getUser_id() {
+  if (store.getters.getToken == '') {
+    return;
   }
-};
+  const data = await decodeJwt(store.getters.getToken);
+  // console.log(data);
+  return data;
+}
+
+async function getData() {
+  const user_id = await getUser_id();
+
+  const data = await $fetch(`/backend/search/filter?user_id=${user_id}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+
+  console.log(data);
+
+  messages.value = data;
+
+  console.log(messages.value);
+}
+
+getData();
 </script>
 
 <style>
