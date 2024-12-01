@@ -82,13 +82,13 @@ async def test_modify_profile_success(mock_db: AsyncMock, client: AsyncClient, t
     assert response.json() == {"msg": "UserInfo updated successfully"}
     
 @pytest.mark.asyncio
-async def test_modify_profile_invalid_userinfo(mock_db: AsyncMock, client: AsyncClient):
+async def test_modify_profile_invalid_userinfo(mock_db: AsyncMock, client: AsyncClient, token: str):
     mock_collection = AsyncMock()
     mock_db.__getitem__.side_effect = lambda key: mock_collection if key == "User" else None
     app.dependency_overrides[get_db] = lambda: mock_db
     
     user_data = {
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzQ3MWUzNzk2MzU4ODIzZDIxNDI3ZTUiLCJleHAiOjE3MzMwMDIwNzZ9.oPSCBZj4dqulSeOQL7O0FcWUMiqud8T0A23OCRlfrIw",
+        "token": token,
         "username": "",
         "isMale": True,
         "dormitory": 0,
