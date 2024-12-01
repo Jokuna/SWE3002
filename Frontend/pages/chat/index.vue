@@ -17,9 +17,6 @@
             <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
             <div>
               <p class="text-gray-800 font-medium">{{ item.username }}</p>
-              <p class="text-sm text-gray-500">
-                Matching Rate: {{ item.matchRate }}%
-              </p>
             </div>
           </div>
           <div class="flex items-center space-x-2">
