@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         val url = "https://swe3002.jokuna.dev/"
 
         webView.settings.javaScriptEnabled = true
+        webView.settings.domStorageEnabled = true
 
         // ZOOM 비활성화
         webView.settings.setSupportZoom(false)
