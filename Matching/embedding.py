@@ -4,7 +4,7 @@ import os
 import time
 
 # OpenAI API 키 설정
-openai.api_key = "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"
+openai.api_key = ""
 
 # 파일 이름 변경 함수
 def get_unique_filename(file_path):
